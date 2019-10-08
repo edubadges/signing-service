@@ -8,6 +8,7 @@ colorama==0.4.1
 cryptography==2.7
 Django==2.2.2
 django-debug-toolbar==1.11
+djangorestframework==3.9.4
 ecdsa==0.13.2
 entrypoints==0.3
 flake8==3.7.7
