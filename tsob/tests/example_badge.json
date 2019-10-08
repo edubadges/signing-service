@@ -1,0 +1,114 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "urn:uuid:637006f5-c679-475b-b3c0-c9bd9b67a5e7",
+  "badge": {
+    "description": "Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]",
+    "type": "BadgeClass",
+    "id": "https://badgr-pilot2.edubadges.nl/public/badges/iIoumxmkTIiiafX74tzjVQ",
+    "name": "Master brewer",
+    "issuer": {
+      "description": "Test Issuer",
+      "url": "https://pilot2.edubadges.nl/issuer/issuers/tR6Bnsy4SHaq1o5860yOsA",
+      "email": "frans.ward@surfnet.nl",
+      "publicKey": {
+        "id": "https://example.org/publicKey.json",
+        "type": "CryptographicKey",
+        "owner": "https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA",
+        "publicKeyPem": ""
+      },
+      "type": "Issuer",
+      "id": "https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA",
+      "name": "Reward Brewhouse",
+      "image": "https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA/image",
+      "InstitutionIdentifierExtension": {
+        "institutionIdentifier": "JHGDGF"
+      },
+      "GradingTableExtension": {
+        "gradingTable": "https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/the-ects-grading-table"
+      }
+    },
+    "image": "https://badgr-pilot2.edubadges.nl/public/badges/iIoumxmkTIiiafX74tzjVQ/image",
+    "criteria": {
+      "id": "https://en.wikipedia.org/wiki/Hops",
+      "narrative": "The master brewer knows his hops."
+    },
+    "alignment": [
+      {
+        "targetName": "Hops",
+        "targetUrl": "https://en.wikipedia.org/wiki/Hops",
+        "targetDescription": "Hops are the flowers (also called seed cones or strobiles) of the hop plant Humulus lupulus.[1] They are used primarily as a bittering, flavouring, and stability agent in beer, to which they impart, in addition to bitterness, floral, fruity, or citric flavours and aromas.[2] Hops are also used for various purposes in other beverages and herbal medicine. The hop plant is a vigorous, climbing, herbaceous perennial, usually trained to grow up strings in a field called a hopfield, hop garden (nomenclature in the South of England), or hop yard (in the West Country and US) when grown commercially. Many different varieties of hops are grown by farmers around the world, with different types used for particular styles of beer."
+      }
+    ],
+    "tags": [
+      "hops",
+      "beer"
+    ],
+    "LanguageExtension": {
+      "language": "en",
+      "typedLanguage": "English"
+    },
+    "ECTSExtension": {
+      "ECTS": "2"
+    },
+    "EducationProgramIdentifierExtension": {
+      "identifierType": "ISAT",
+      "identifierValue": "123123"
+    },
+    "NiveauExtension": {
+      "EQF": "3"
+    },
+    "LearningOutcomeExtension": {
+      "learningOutcome": "Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]"
+    }
+  },
+  "image": "https://badgr-pilot2.edubadges.nl/public/assertions/zBWhxq57T02zLM9oYVpI2w/image",
+  "verification": {
+    "creator": {
+      "type": "CryptographicKey",
+      "id": "https://example.org/publicKey.json",
+      "owner": "https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA",
+      "publicKeyPem": ""
+    },
+    "type": "SignedBadge"
+  },
+  "evidence": [
+    {
+      "type": "Evidence",
+      "narrative": "Evidence:  How is this badge earned?"
+    }
+  ],
+  "narrative": "Narrative:  How did the recipients earn this badge?",
+  "issuedOn": "2019-05-07T09:10:24.020337+00:00",
+  "recipient": {
+    "salt": "cc8ddae0388e4ffa8fc42c4a20a01c66",
+    "type": "id",
+    "hashed": true,
+    "identity": "sha256$0e074091e5ce8c360087151676a03302d3fbff95ae14595c782efacfd99e8b5d"
+  },
+  "ECTSExtension": {
+    "ECTS": "2"
+  },
+  "LanguageExtension": {
+    "language": "en",
+    "typedLanguage": "English"
+  },
+  "EducationProgramIdentifierExtension": {
+    "identifierType": "ISAT",
+    "identifierValue": "123123"
+  },
+  "NiveauExtension": {
+    "EQF": "3"
+  },
+  "LearningOutcomeExtension": {
+    "learningOutcome": "Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]"
+  },
+  "extensions:recipientProfile": {
+    "@context": "https://openbadgespec.org/extensions/recipientProfile/context.json",
+    "name": "Sander Kjær",
+    "type": [
+      "Extension",
+      "extensions:RecipientProfile"
+    ]
+  }
+}

@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "37c2ac3c-dd49-4493-82d0-45f2459e29a7",
+		"name": "Signed Open Badges",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/privatekey/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8574614a-60fe-4907-8215-d7c780e190d0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains initialization_vector\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"initialization_vector\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key\");",
+							"});",
+							"pm.test(\"Contains tag\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"tag\");",
+							"});",
+							"pm.test(\"Contains associated_data\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"associated_data\");",
+							"});",
+							"pm.test(\"Contains time_created\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"time_created\");",
+							"});",
+							"pm.test(\"Contains hash_of_public_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"hash_of_public_key\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"salt\": \"salty\",\n    \"length\": 32,\n    \"n\": 16384,\n    \"r\": 8,\n    \"p\": 1,\n    \"password\": \"password\",\n    \"key_size\": 2048\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/privatekey/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"privatekey",
+						""
+					]
+				},
+				"description": "Generates and returns an encrypted private key.\nEncryption done with the supplied symmetric key params."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/reencrypt/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "34152810-97c3-4a61-8ed2-8024c14acf85",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains initialization_vector\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"initialization_vector\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key\");",
+							"});",
+							"pm.test(\"Contains tag\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"tag\");",
+							"});",
+							"pm.test(\"Contains associated_data\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"associated_data\");",
+							"});",
+							"pm.test(\"Contains time_created\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"time_created\");",
+							"});",
+							"pm.test(\"Contains hash_of_public_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"hash_of_public_key\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"old_symmetric_key\": {\n        \"salt\": \"salty\",\n        \"length\": 32,\n        \"n\": 16384,\n        \"r\": 8,\n        \"p\": 1,\n        \"password\": \"password\"\n    },\n    \"new_symmetric_key\": {\n        \"salt\": \"salty\",\n        \"length\": 32,\n        \"n\": 16384,\n        \"r\": 8,\n        \"p\": 1,\n        \"password\": \"wordpass\"\n    },\n    \"private_key_list\": [\n        {\n        \"initialization_vector\": \"0eeb5940877655cd805b6863\",\n        \"encrypted_private_key\": \"1581df7062e99878c5a3576f2e983fe6242377150be6efa5851759973a8b6e4f509538e7dd65eca6bde0fd0c62b91d1d0b50e37e65054ad6fd8fd6923c6e576b6c0b8c45851a6e4029c30603fd406280540d37b1a8d3128de7ffd83026a2a97bc37f4ae733032b3c3b4a90f4e7965bb630a51a923ceefecc01419e46e1d12a21b4188a2c4961946d5c716941ee77c38b909d26231b4b794de4fe8d18fcc6ce89d2644507296b5be03954abcb41277ea0234ff3490c26487a327d2eb8cc30a6547bc6444a93c5a2ab71a51649603a77fb1a985fd718e8d0ee5e16e07322587cc7698daa51910afc151a473eb72ad1c296269204a8674a396d3d0f5916933b0511be47c6c9406ab0d66883312fdf591fd27e640453cab54be3d612f0aafd9f6887ac6d2211f3f70f28e2f40b1ba456ced8d0ccb7be986d3e75b5e2e7d8a3e2cefda871d29c52571e5ec0d15cd42039a0a22c5925e4d4ab9aefb3d0ab1154555397bb64655b1c588e3a34215412267f66b4acbc9db2b4981e6b219b6aa6797a65db3669b25f7c2b9abeb14c24e2f4fb0dea9d3d5b0661f9a135f2993aa9fbde9a1074a4425f173877bed5ad48736fd9b19bb1a5ff5092317d59b5049474c2edd38b6a3077704a4ad6d91b6f164b02a789ff235281a4e9f77f15876bf013cac99a0683a19b73a4550ee8b009caa45c52d8188952dfdff69036c7501a5830cba78059b2afe3bd1c96114fe67c88619f153a7dadf209eebebbee41d4f2064a7794cdf189d31a0fb1e4bef60579da45d3176ac7c4b4a7e1a2c6762c076e69990aadea5a73b9d9aed0512a50309a28fb8178f0b673906a885ba06b59104f247eaec9d45bfc34aef37d01c6df40e8aa5154000033474d813ec6fe441c0d80edb2b43a04c26c75d5cbb0594d7cdaac9b3b693c7253461109abfcc228e413264f3001a2378f7408147eca5715f6a5da9d8d55fde24e51db6b27307434c4c9a8ca65c01b43a03c00f66b52ad19542d873c3cd68249be66dc0eee2dccbf9e112a2eefa9fcbf69fd0c05a6d1265b7a2666e1983c5227e651c7a2be36b9a8863a3cc348e40555453d31e9b02e7be04a139530a77fdeebf7a7ba377b98282a3dfb822a53c85f5f29b13f0ffb497f1a6f8766d717aef99f7996fb1845fd75495f6856d471a1c37aaeb63bc225cf9a04f24c77555ac1c94659869cd3ecfd717c6b52a7a43a3647b4df52567a09d892cab9ec82969deb0d0109d51640419edc9324bdf943bf92005a2d17720baa6120e68d00c9a644ab770d180237b3eee87986add727a4b298972bef27e19819fe171c393ca1867e8408106b4064559c9ffca063da29d8fb20d8020a41d8bddcfdaf2479f71f243e5a843e148c105f545eb8876e87b38c70b0c6f7d93a3cc415ad76215d42c20782b6a265ed330faefa720986df9dac7a27a22d82ba7497d2c978ebde1bc45a5b6ab49cd40006e6c1aed1970687503d011211a3ffbe11fbb94f1d12b43c11f1954a6228fa80eb51a863b25b18c7d4a261292caf56c78d62b88746082b20085eb8b6d02dd3ff6ca751eb82020bc7ef7bbd56a1368e1f0ab6c72c1fa86903b0a7ade30bd7e976c1d6f7d7ff35ec5deb2c5c712c424fdec866ce1388195725e6eae7f082434db04f8fea79ad5dfdfa2b4e0358458272f5375863a0af07758191b79d84820ea21b0b3dd9cfa3d4e3a654149ea77910d47cf800646fb20029f61e92c39f1bb96e5c3b7bed05886020acbd2e7b6e211c94b8d092c74868cfcf045635f78a770ed9be4bf245b063259092d6ae96ded48a9efe112d9b9ad3d833ffc3faee1c6f1127a98b7e8b481cf0639272a9c8b50036a0a8027b2bc6337de82aac0bb5990e33e8b28981513600b2e72044377540cfbaea532bbb8808485ae364b2e6d005fcf98799f9b92849410c0fa585431e2382054f49d4e413fbc103b28d6f9887d32cb505220909f982978886be70e58401175020f3585e5851cdf9c9aed0ef37fbaf9817f110f850afef50cbe42a4925a240b627850bee60f79f8e7923b0a0728d7c90fff3713c45d2de7b033f8ddea5768d0f250fa67b036af032251712c8d58a07bcbe499c3b23fa4924ab11a07ede32c588ac9b7979cf3ac401fd8acb535f0bfb64016a346708250a12f0623aabe95955de51867b7288b8ed5f95343a3ed9e0afecef4a57dd83c3fa3428ed94dc979f16376464c6f802a6736cccac1e95ed2014435bc8731adede85a007ff1909eeaa511685af8d2aa967bed319b69c7ebc661eedb7e307f3ef9e2512d8de53149e4dfe4fa2223ff3a6db5a1b5037912df052c43a7d778aadb465e7042a9085a860ca7cd178ab8dae8451b849a076fb62e2c32fd8efd4f7e1ddab17779899aded614da62bcc90205a2ddf1f7f21d113c69d8cdf2c30eaa1548f18885d8c78dfc36883fa4b087a38d345883eed94370f19e3809a3336b93879faafa54a5f9ea1cb459ea885249f19402a4d2943b1d6ccb1607c37c704b796603cc73c15ee43183984823c8a421fb394a405372797eccc3efbec58dac2cda40b320d353610eb679a2404900d243ded80dc9f8ddf722f63d1ac7c5fbafe608ba30c56a898867dc54f851dd0dcdf27c6458afea50ef629fc115055b15f25970fa7a4f56f26a56db3d6b05a26939958d1548c28107192b26e3f795f85bed55d55b17a94ce166eb5b9196aab52e1d68748c664620ad3b64a786b327822f9d9a11024c9b8ab109f56eddd96ca4fdf267a3b6ca18d455ec3baaf59d77b50f42e1116cbeddfa5876928c85eba10efc472fe24955200caca5156583611faa99bd55d47e170824e01b8ae9f0745ce0980fef5d0e7eaab3fcf8b1ad1a2aeb2affb8c886a366a897aea1ac242a983f20d9fd0451b53de8b1777b0896b91f3c4bfde81987dbc5a571feb6f7523a0eeeed7de98a62c95996ede97e515569fc3da059fbc350b9bff8083eb6802d44ef97414075644855cea7a7ab9ee7d7b23008ca94f4ce8f24a38312af00cb478474e18be2f51727e1bdbf941c6ee9ba5c3843794f48832cc4165b6e93575c695ecce014dbcb3cd91b59a4635580e626628ccc93adfa4b20a6d32814f980192065c46778e6f8d57ab64fd9b50628ea2f5d1e097a8ea43d17e2055e98fc18442b72f661825125cb62e254d51934f5cc7b5a1dfcb5c0de3edb6977037f928f47e69f452546ce497f6acfe55cfade252ce70b4ea78bc6acf699db135791d32d953d369cc024eeab52a636050457e64098c0f2c7b833da529c21b7b6e07ea7cd32419e87e3e2076776a8ab93cf6a76e515c4dbe8209437863b3f160203179f6648a04a4d60ab76f10cbc0f30006ada99e9e2c4ef2416bc065361c9d7beafc21ae31125a030eee5c9cbfae32f0107f2d11368d957ed7dda8d3e1bc53f7bfaebae41a8b80639861eae4d575869726adcb62a1187addb2c57b11d5032322ea2b3ffd46149308b1a416afbb797c6c5eae59089e77264220cddc120cf12086d1414fe7927c1ba1a1bc77896a23f100a0730d70f041ae1c0176b02249b3c9c959fb18391c4b443e735d3c317bf0be7e1ae1ef21f7f7bc33eb8b8eb0c7cd701dfd901d790eafa64ef103f3bc41e81172c380e37b4f944d87ef947cbceb6f0af26c1cc23b84b4410c6177022f55fb57d984df14e4552eca929e10d51839d44b4531c59e26f0769c0a3d7f0bd5cd44ab7edef3e7bfbbd46624d884d4e752f95f0030a417cbee525730c7dc28bc5bae889fb57e4199d07da0ca46b6f824b41e823f4c2ec78c49acbe4b439cc71fe2b89ae03ff318cc780d709d3706ac8c6258a42088d482f60f768be99b27edbc9edbb3ffd7e1d48c58dbcd2a4a74fde4175068a6ddb9f5527695ce21495739495b24341ccf38074728116fd0f63cc6e0d84b73f5d41a08d7c2fdb73f463634f83587b71be8198c01c055c3c4f20e2fc5df35ad951c64a278daca61900b835bf788fd7ffb55a259522ab6a4c3730cd84ea3624518fa957f3f07da0b2319db0b00e5d5a85e50d36595d36b8d9bd7ddc7497c5692a8ad59c91896f2726a43a2f2a533883934f572e9609fc6483b02578b13e3de3cbfb9d30cd31441b979b14b3bfdfe023ccf25531a1d2c8e9b918ee9738337ce85366ba876680593c2ce5b20c22753162ceff6caa1f3a065533c7b94a6ad6324e0198a35d2cafb671978f901995e0b92f76195bb5f6a9160e166d6d0f2aa5985b6b7a8f51672c05f5abdb6aa9b9a4bfc6e542da0bf069a5b0424fe6b9066f0816d0ffb163f66dbca18e038ea16df08049beb8adad64676b60be4a1bd699444e2d42f24abedf6d69b326fe68cfead6dac7987f79f32a4b291471e55d01231d3275a9acbaafd3003d0e9f3d1fdb5466f97bab1c05059bdcded1e43b53c3211c6f806ceb17cf1bf1d5125b73df1cda12312a54e46753d3ea8da1a46e9dd3a5c2cb6e94939d0afbbb0484761a62102f4d7a4ed612ff2b553c0cbde05e92474c66e6bcf74bd309a9066908537b6d05e125cb0ef0bce53328006bbc966f10aa3414bb2e4ac29b768605980674ef54699f40fff5fd1fabd0012f919b4fe769442b1110566a528f173dfe378ac47c1d7fb0bab9d6f4f183f341bc7\",\n        \"tag\": \"75aa422394cbc956773e7aa5e95f8b49\",\n        \"associated_data\": \"32322d4d61792d32303139\",\n        \"hash_of_public_key\": \"cfbc586e65816bcdfe905b7f83815c03c66a6cb267e341d744f9d74f1e0fdafd\",\n        \"time_created\": \"2019-05-22T13:56:17Z\"\n    },\n    {\n        \"initialization_vector\": \"04a90c5e2e65430fddc313e3\",\n        \"encrypted_private_key\": \"8228e51b4c46b6adfbc9eeffdd62e8b99c6fdac87541d40681ec3e32a6576019c8e2b047648d8f604cb364703a0333cb44023b4c4463ace72a13508244049091782bd845c7c244023792532550905d31287e6c712bdb95e7a29e22adfbc0b8ac0ff6b4c2082525b732c3c5906ca8ec8ffdd02eadb75f62f6ff9f7335cba1ff3b108ac9b34e9645e5a0523933d6d80450b57a199fbac1ab71faa4fd397f529d29a583134f59941f3bebdd727635ab7f434a3510d2f5d1944343c2188aaeb3c2ad92497a8862f636d1ab2594c7dceed5fcdee6e37484a2a08dc65206b34c80310cabd45c1518897a75b57c8692890b5184975d3e8e30194acb46f41f179ed5766d6551c8353b8c1c6e940853649dc9ca98d9d79c24bc68488405c596a6cbfa25d1bf82f318ae859eb5244155d31a24ef1f555aa9eccdda01234544aa7b4bda68ed4b41d9f0600110bda35700506012fc63157d96d9f005273522079df18039f4e443c651402c83516b662d6ce2e5cdc0dbe6fb772eb60e8bd727e46a9558585ba43e641f8747982bea73546b5cc64e7b817472ccf81ded5d269e604213f9356de6bf216df732f2664e68737c7ded0e82d0f3bf6d418d9f82d953f2cbed29045a20983e0488ac1021501fc56cb70ccfc5fc84d237e36b1dbfaa13502aef112a566e268ca61599a7de462c03622365754a602c6702c973ad4f2a00f66962af3eeb75cd912f84399fa310acee8eab3fda327c3e97e684bab38d7a6bcc3cb1dc21c644a67c49a269076ef5e4c5f3649abac02d0e62a93ea956148b91a58ee719bdfdf4d1375c07540957ce649778c97fb15340a2d661a75605af9d0286f136b9c352b1f7be4269c6aa5a9139198a3d5d7e92282b20d09cc859a377e92f6f82559d99ba2b869ac25906b6c6960c3af1121cea927f80455a7f2597b3231d2c321f3ec0a1a26b7d25bc83cd63d99f0b93b3a9a03da4b01248f65e22f737095059b05b68f0c8e3b700a5fedac995582e5c7aae2226d33cc1586a1bd88c739addead6d0fe22a63c910ef8cc64b8942b7ab8dc47a3fd97466c37e96d3e9d2035ccc6ba23550438b045171cd6c02fc1434295d24525a5d869744ea82d8454be387b46b61e65d3f63c762f9cea12b97f0896aa683141f1d44bb50490ef10f822c4dfc57d5c0acacb67be2719065f6a30821e617469e394d21672b00b0234da579e1028e6a4d01dcc29c0b63bc9ca7f4642fbe1b2ea92b495698d405bc07395715da44fdd0d3073036c59cc18a0db70ededa189824f1925a3c766d6d9613c6a4bfcf6ef3c981ea470631bfc59ed7b176abd8a2f033c14141aae1d42d12710f5bbecf6475bb0c6b1f14b7bf6d770f3a2968ea59d7b3c8992450cfc66c14a1831cf607bfda0a15ab8b16d9203baebf31a4cdb85db0c99d56e28edfe6a498773115c6393bde342dd0a5d0b33cbf71c6e01395f23ab86bd137d7e6ad39eb73a56ff576b9e2230006cd76e59911b85fc5dd74acea482ad07be976d4e93565a1f95df55a918b95cf1816301346d6f480042fc9700608e966a474c6d07d35767b726c7cb5b19f886a77755c0406eb6ddb2cded5bd92e3b5d3907ae5c9197cf2824f6be0e112f48702ddfb0117816450c4fd6267f117a69bc03a93376fc3f085fbcf725666676925a3fb9952f6ccff99976b0f65acb3eee1c1e7e79d9019e3baec384e87d4bcebc29d431c878a50748ce516091896000d495568441b7bd153660b917aabd20edeb5e79af97e66279937300d483a25211a032893a3cf121cde65d10941a321174a46638f9319133af919b1cf3e00042bc77f432fccbc5a4d0013840f4724be3f10e14537378f754b018d31e9acb04a5562f82e70570709d31906317440d46838068ae5d784ffcf6b1998089373246af8d412f8917623c84466faae0f95e979a4643dd118a1a0e900abe74eef2b8cac9748f914bfd7a113bc64919a3772c62b831e78aa000e33bb613fec47ce5e602453eca6cec868b6d3a327554ce1cd905c5eb817a451897dd1d50bf24bfb45d761ffc1e175b6b78989d3cd70842b432c69435cf147809be1a940656165b94e80c1ce6bb13b6cafa57340821b28e683d959dd0a66f710d9c54955efc02a31a311eebc73a8e1187f2554f39940fd6453a3c9eb268ac27002b4b3ca5a54c1b6aefd71ddcf9b0c28803ff91b72ec206d4d5509b970cdf10da2bf70d922fdf09a581e66517c419c704dd305320d0ca10e769afcfbf6c70c7fa9d9455a32c26e0f05526b60684895c0df8a2faa8b8e0157c35756b2fec368a8d27e1e501b2a8f98360dd84e13d4eb09f9dd6d7e2e366f29079f0e95d90c36001086bd41b36175c1cdb3efaaa8a7beedb70bb8eaebbfd0fcb13a08a8589acc8ac29b172b3cedcdc830a940e850b5e32e37bb84602df7e1ff25d3c8c5350c576e0a31e89a639f84a7037739874912edef270af94dac11c705901f4656400aa69ac6f61c155525321f14a6154bf0774bf442b82be83665b6e57d44b0903f7adff5e50ba01bec63b11b276d07d3dba2625149d994f95ac6f83acb5b60dfdb0f2f67055e981b1585ba204c81266ba3e5ab5f88154d3af4d923bf211c62e917bc930681b90bb3b6a40370aa9be17313fac2698dd8d2076e816e63bda7e805733ef7e1289269858d2bbb6162dc863462864e0be2fa210def877f7985c14d658846f8cfe19b726d79ca5c6078f9542d6c8faea218a4b5d937a1ef6b19b35405f86907c8f8e8a8e2434d4d142de9048a36d97c331d494321bfc82b893c785e1bb40c16d814bd20c804043d899e555a3d1504865bcb8d5985786b83a57e2235d9738ab32b62718f5c724d1fea3ce7f60cc1d3bc1410d066b2789d495c6213cc2dfd5c7abc6c84094d44f85c9fce6f3f300f310e0762e839d691cfb63702de2c7c021352384a3f28d4f81381bbe141b187dfa72bb74f5a657e66152e8445253398eb2d58acc012162a55cf562ec499d0c0c09b68110f6a4c440724f365e94bda9c8c8697e3fa4a5ddfeb109a70473fe4825dac004e583ab00089f243b619ec2eb67ae2d72b63018f0e7fd2f302b551554dbaf909309613a0991190254ba3c19ab8441b6a0ac53a8cd3c651b6c529d363d8d9b8387cd5cf806c90fbc40e80dd9ddc45226c3543cd30b79c2ad90194034089856ad4cc5cb7ffe09fc790bbba00ce631081d575fe7812db111403f80858b3ad5f3456b02050e2a00391092cf50ade2f40d51e6d7394ec20a382ed03de0782e210fbb446321d10855e4b0155eb830e4bba7b35809d1557b49921dfec70995690752bb25c10352ab497ca304bce03b17f462f3bff66c3485805fa3a5ecbdb7cbf791fbc5d18ae15e3a301525586bd564a13204aca13d865e6cab6268b1db7402568fa0c03f7d6d9181a757dc6d2881aa1f485c36f7a3fa1c85de57d4771906f51b6bf316c9aef2f55f3dee91188d569d480e7ccb2df95a042bd0c30d4e91f0823946db9357694a026dba9e161af8aa57c8c50448fe17678eac2fa29b0e8cbdb159e195eb8cc1c9b96b9096abe7871f9e5550a4335f053d7ac62bea207277d06706a57f07c5b31de33f9109b7ffc2c1fe46be4c5067ee407a26572784d73fbaed29968b808c433a4f027b20989dfeefe740d1d7320a2bb2e8e4c83c449342562b28302d22ea5d01c2d8bd7d3b3f900d8acdb85a1c9f540bbd956cb14b55110b6178803d26d87cd615e2a6ceeb2ffb97ff1040da1911e09beeb13ccefcb63389671605f2eee8bfd1b2c6d1322beb24e18f178035f1354617799eba4bd2f4d1ad6a1ca2819ba65794dbff8f5cf8ab233a5f69f9ee0c17013c938f57326f90ddd990455b08cfc212b6efbc47030ce58f108a5f9f26318caafb1471097167ce83474c28ad4f27082644fb6312d433544d0f85d51dfad04005934fbf93a1de27f7169262c913d4fd4cc2e748084dd29ee13719058b94ca100eafa98988acbec08e9522b4fd91bbcb3dc9af717b4f07d8f75aafd00b1e802c33f457eed150f1610d49bff44a6803f8e0ec53296acf6664207f774230ef1776858268829051e480b17d08f8db457e655eb2acc107589fe8c8d6ce76dd590589adcc1bd83dac6e32f2c592576500489a7d37e9a91931e27a1a7c9a1021d5e22f5e91d772553232ac76baf1c9b8cbc8be26634ffa434e9fe318b4f5d1adbfcbb3c4e49e637f5f96558fbab972ca58542cfe6cf577cc636ade1718e583e24a29bd40963c027f12516adab21c3ec4c35935b211883e5e34563ba46f75c396b247ab56166797ea720566fc727dd2208b1c2f7d96aaac2c045983d7faf4b28a19eae92dc37c9cde4f19aff7cd0be7d31b710d646149f0706035b851970b755fb21e363f804e6e6c02ecbe2e98d7fdbae54f6233625a292d5226438e9df82bb1f138308384430689f41ce699f3f819125bc27ddfdb0860e51f5da7e64a9b141682d97971891aa0712918b3d5290a33807462676bd03b5a092379dfab8ee89ffaa2c4ad215224f83881ab0385376e099b909aaea8260754bfa1635155797d1bab4a41bc23cc2a901154ebe13d9677\",\n        \"tag\": \"e7ef7ee1590b9df5a3511234b1161459\",\n        \"associated_data\": \"33312d4d61792d32303139\",\n        \"hash_of_public_key\": \"1631bfe49dce9f28c65e7479aa7f8d8cbec19add594071aebc4f0b397fd3291a\",\n        \"time_created\": \"2019-05-31T08:07:13Z\"\n    }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/reencrypt/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"reencrypt",
+						""
+					]
+				},
+				"description": "Re-encrypts the private keys(s) with the new supplied symmetric key params."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/sign/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "51ec1ccf-0eba-4117-9894-f4270de8f734",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains initialization_vector\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"initialization_vector\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key\");",
+							"});",
+							"pm.test(\"Contains tag\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"tag\");",
+							"});",
+							"pm.test(\"Contains associated_data\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"associated_data\");",
+							"});",
+							"pm.test(\"Contains time_created\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"time_created\");",
+							"});",
+							"pm.test(\"Contains hash_of_public_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"hash_of_public_key\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key_used\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key_used\");",
+							"});",
+							"pm.test(\"Contains signed_badges\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"signed_badges\");",
+							"});",
+							"pm.test(\"Contains badge_id\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"badge_id\");",
+							"});",
+							"pm.test(\"Contains signature\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"signature\");",
+							"});",
+							"pm.test(\"Contains plain_badge\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"plain_badge\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"list_of_badges\": [\n        {\n            \"@context\": \"https://w3id.org/openbadges/v2\",\n            \"type\": \"Assertion\",\n            \"id\": \"urn:uuid:637006f5-c679-475b-b3c0-c9bd9b67a5e7\",\n            \"badge\": {\n                \"description\": \"Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]\",\n                \"type\": \"BadgeClass\",\n                \"id\": \"https://badgr-pilot2.edubadges.nl/public/badges/iIoumxmkTIiiafX74tzjVQ\",\n                \"name\": \"Master brewer\",\n                \"issuer\": {\n                    \"description\": \"Test Issuer\",\n                    \"url\": \"https://pilot2.edubadges.nl/issuer/issuers/tR6Bnsy4SHaq1o5860yOsA\",\n                    \"email\": \"frans.ward@surfnet.nl\",\n                    \"publicKey\": {\n                        \"id\": \"https://example.org/publicKey.json\",\n                        \"type\": \"CryptographicKey\",\n                        \"owner\": \"https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA\",\n                        \"publicKeyPem\": \"\"\n                    },\n                    \"type\": \"Issuer\",\n                    \"id\": \"https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA\",\n                    \"name\": \"Reward Brewhouse\",\n                    \"image\": \"https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA/image\",\n                    \"InstitutionIdentifierExtension\": {\n                        \"institutionIdentifier\": \"JHGDGF\"\n                    },\n                    \"GradingTableExtension\": {\n                        \"gradingTable\": \"https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/the-ects-grading-table\"\n                    }\n                },\n                \"image\": \"https://badgr-pilot2.edubadges.nl/public/badges/iIoumxmkTIiiafX74tzjVQ/image\",\n                \"criteria\": {\n                    \"id\": \"https://en.wikipedia.org/wiki/Hops\",\n                    \"narrative\": \"The master brewer knows his hops.\"\n                },\n                \"alignment\": [\n                    {\n                        \"targetName\": \"Hops\",\n                        \"targetUrl\": \"https://en.wikipedia.org/wiki/Hops\",\n                        \"targetDescription\": \"Hops are the flowers (also called seed cones or strobiles) of the hop plant Humulus lupulus.[1] They are used primarily as a bittering, flavouring, and stability agent in beer, to which they impart, in addition to bitterness, floral, fruity, or citric flavours and aromas.[2] Hops are also used for various purposes in other beverages and herbal medicine. The hop plant is a vigorous, climbing, herbaceous perennial, usually trained to grow up strings in a field called a hopfield, hop garden (nomenclature in the South of England), or hop yard (in the West Country and US) when grown commercially. Many different varieties of hops are grown by farmers around the world, with different types used for particular styles of beer.\"\n                    }\n                ],\n                \"tags\": [\n                    \"hops\",\n                    \"beer\"\n                ],\n                \"LanguageExtension\": {\n                    \"language\": \"en\",\n                    \"typedLanguage\": \"English\"\n                },\n                \"ECTSExtension\": {\n                    \"ECTS\": \"2\"\n                },\n                \"EducationProgramIdentifierExtension\": {\n                    \"identifierType\": \"ISAT\",\n                    \"identifierValue\": \"123123\"\n                },\n                \"NiveauExtension\": {\n                    \"EQF\": \"3\"\n                },\n                \"LearningOutcomeExtension\": {\n                    \"learningOutcome\": \"Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]\"\n                }\n            },\n            \"image\": \"https://badgr-pilot2.edubadges.nl/public/assertions/zBWhxq57T02zLM9oYVpI2w/image\",\n            \"verification\": {\n                \"creator\": {\n                    \"type\": \"CryptographicKey\",\n                    \"id\": \"https://example.org/publicKey.json\",\n                    \"owner\": \"https://badgr-pilot2.edubadges.nl/public/issuers/tR6Bnsy4SHaq1o5860yOsA\",\n                    \"publicKeyPem\": \"\"\n                },\n                \"type\": \"SignedBadge\"\n            },\n            \"evidence\": [\n                {\n                    \"type\": \"Evidence\",\n                    \"narrative\": \"Evidence:  How is this badge earned?\"\n                }\n            ],\n            \"narrative\": \"Narrative:  How did the recipients earn this badge?\",\n            \"issuedOn\": \"2019-05-07T09:10:24.020337+00:00\",\n            \"recipient\": {\n                \"salt\": \"cc8ddae0388e4ffa8fc42c4a20a01c66\",\n                \"type\": \"id\",\n                \"hashed\": true,\n                \"identity\": \"sha256$0e074091e5ce8c360087151676a03302d3fbff95ae14595c782efacfd99e8b5d\"\n            },\n            \"ECTSExtension\": {\n                \"ECTS\": \"2\"\n            },\n            \"LanguageExtension\": {\n                \"language\": \"en\",\n                \"typedLanguage\": \"English\"\n            },\n            \"EducationProgramIdentifierExtension\": {\n                \"identifierType\": \"ISAT\",\n                \"identifierValue\": \"123123\"\n            },\n            \"NiveauExtension\": {\n                \"EQF\": \"3\"\n            },\n            \"LearningOutcomeExtension\": {\n                \"learningOutcome\": \"Hops are also used in brewing for their antibacterial effect over less desirable microorganisms and for purported benefits including balancing the sweetness of the malt with bitterness and a variety of flavours and aromas.[2] Historically, traditional herb combinations for beers were believed to have been abandoned when beers made with hops were noticed to be less prone to spoilage.[6]\"\n            },\n            \"extensions:recipientProfile\": {\n                \"@context\": \"https://openbadgespec.org/extensions/recipientProfile/context.json\",\n                \"name\": \"Sander Kjær\",\n                \"type\": [\n                    \"Extension\",\n                    \"extensions:RecipientProfile\"\n                ]\n            }\n        }\n    ],\n    \"symmetric_key\": {\n        \"salt\": \"salty\",\n        \"length\": 32,\n        \"n\": 16384,\n        \"r\": 8,\n        \"p\": 1,\n        \"password\": \"password\"\n    },\n    \"private_key\": {\n        \"initialization_vector\": \"39473e0d418ecd63b9a56a08\",\n        \"encrypted_private_key\": \"e8aea6c77fcefe5c4cf266287eac750ede3c43a6254ee2f89ec72e422faffe5efead735f732c4129f7f92c1669c45c4bab42da402ec10c469ab1dba212cf586f5f7292c89d94f82069185eceb1dab4a95f4d4c1d8aa8b4dd644778cbae50c5230f7d7f2903e3658d6e0e0acc40f3cb5032b1e9820c698a898f1dbab6db01c7092041baf57bffefeeb858419f130a98bc1fdd135cb356115af78a34b7d21479f213c3fb51f2a09fe4c4bc57723bff618fe5c56f5fe3ebc3c96a756555b4286996ff9a2b504f9d714ce491ab16580f6d99991711895ceea0d71d8648ad216125c10e26609e919ef7570e7008c8ab272edaf00ed5b18154cfd92737c1f6584dd3d86be3ec8c3605669127c7a2a91649fb3da11c225cc48c2e28364cbffb61c408684824038995bda51f7328492e6d7bc340e131ae22931090bf470b6b088e847258b35f609e2f2f89c7335f1a7622d5fae48829cbbb7b11be1d2b5b2b583f50e2f933d9c198532dceda23ed47810dbe3880d58cd64b573df5ef77f54e2f978135da83e04613c213c4395bc8722e617239ed8553fa3d3632e856326538cfa7b328d8aa87328378af6038b91dee937f0baa4db4604650c1825c0b813606c9e5f7afd39ed2dacdaf841d1f05e25591ff006b8134a98d75d63798143756c9a5d3612d0227cd70aa2045b34a8698402bca2688dd5ae1d13b2e04c471d57f71cd6b38e8369994c7f4d16bf55b2abf4d88316dd6e516302bfbe7bb895f2ce3da6343845a315d235c47c5e3355b80186d2b8290b50939d8650f2832ca576c177a8c88facc779834834d33b1fcf123122493605c63e042ca9cc28ef73935cd59d710f28461f0ed0de9140f33777f77a31335e55e1925e10f72f21d992ac8f2d9e273c4f5e5ca2d42dbf8eb4d1222d11de67ba0208641b528c7cdaee6e56fd6eacc150dc6bf3828dd3f17c6c18af0c2786da2fb6a5ca9ef83cbfb7df380b18eb1a37c042818e6171809637ee1dddd0b4e33141034ad07b25a5e9547f5ab6d9409663f18be8a46bca93c19ce9ebbd56c27d8355da36c1856a81c389250dad71b6476a8214802edd0f279e388e3d9a7c29db5cd9f71181aeba7b6cb72e7a741b151b1bd6dfc30ab0bd32577e30916518d078c593d2ade7068a69e1a87a9146e54b96b56f171a31163d9d4700128021e7c16409a18fb4871bad1eaa4a2c9dd90275dff76fe71b4c09a4a1dd84379aec9b40651b20aa4a8306c66caaab7e9c7ad25c677a147e242caabbdf7c313f8676c09264a20f4a2e88ac3414a8d763f06852107571d97b31c34360c8b2cd0bf960e04409a64612113bd73043d330adb00a67f0ba7e28a2292838efa2e55a07ea7334af8d1acd576f232b582bba4e696dea3e28d11d8a63f64e5c026ecc3524866785c6e245b89758562f3b0a80af097b34591f78e4d0d2233880ccc717812fd02dbd91f7c5acbdea30b2eb2210a6f17e30382b2143f98830bad57abc7cb43af8c305b3c37372240d7039c0a398a01a6b11c4e62f178cbcf161f4c0a1e359bb49ee420676d40f0d675ed68e05200764b7268553a2a7727e98e74a6f1f7835e4678035b5a73dd094cc2cbbd39bd0f992d7b13e52c78f5e0d45fd5793b11413c1f222c8a352161d0efb2bb340be268e5094e045bf6fbbfd03a674b4dc106e3743033c69246d337999f617da8367dbdfb1edff67597dac14ed1b7c356f536331c8c8d54d3e8f0158176e56c04b2697b73bb3561a258ad318f9bb42e196035009f27f056ef8be020491b44fd668af537bf4e58f84f3b0df284aac64a39967e172eb79ee8a04072791c6fa7f73a5138332af70c0b24e6b87c0eba133556c9ee616221866b0aed9efc912e3bd32c1320cfea0d4326bfd4a54389c82721c667492fa11293624a8c0760eb7db40e6e12dc113c70e55fb4a27ba60573772c0638c20f14d577a15326dff91b853ccea3e2d79611e167dc39c496497eec4ddfd8eac2ef053c76b34828cbe40517fb8692df44ea69fbd91cdb1206c02ccbebf21b7bbee5745ac7940da2323f91287c8299bc0239d7c73efbbb8fe8fd4728645615823eb4359eca4aba761eea59d0e01ea40e1db0551fc736e96ca7f043c664d55f6814c1ac467cb1b933f8b178fcf116005f20ae4ba9d9470369cbf035c6769566f56cf77d6854559a28245f640df22125201ed4888b66f3c9cdd8c5b4edcb4868469622568bac8312971a74a3e09d88c8d1c66d0d15d654655ca08ff4b3111f4ba5def01c65e7fd37bc1ab5f3c3702008fc35054a88175e561e8cc2ad875b608c9dd89f7420a02a61650a00490c710e9e2bac7286f231607508dce5130b2a5341e924deb3eb558884484149e3157216ca49ccf747c8d720826a7865cf120b95efc5d35b16e25d2564b28ff2a08bb208ee99a0b2eb266bf6f61e9498db178e90f421641821aad809870a9f81ee820c703980a0ec6d5764beacb4785707efdbf108687b9c4cba30fb1e5fb924ce52fc915a3dbbe13ac5d018acd18de608c1c1e1cd10b9d6e02f7430225d39a9ebe1ba207f0b54ee2ec7cba87bd4f0e08f857f359264cf5abfe49d1c9eca3efa7a35bbd8e9d6e52c533d9e38cb3a674db83a675165ade244979dafc1616be04369d1119ba5137d3d4b6005843e22a20104ca5afc1092faf7979a58973f6c58078f5ba4cc98ea56e713bec82af873081486c2cab1bf669c630c9706a7ba60d67e02c22978ef675d432f215ca37f574856be2877cdc857b63f35b3a9cde231552299885996ee1ec1541738f45fea8a6dc772c333055d9c131ecc8fa7337beea69a98e50974e60e98056cee5566151617b8ec39743366e0effa422d5b0e4f873289a8a423c4b1d528f808315f5396a103e5c9fe7e023dbd5808c5d66d85109436f03f9c3715661e13d491eac831ef8a1d3a53d43caa6a2c6d266e3d6111d5a530f7663f3a94d6b21af367bbbd5f09e14c02d920e73140361ebf58b3e4540127fd272c09774ef4192135c669bb6921867dc1896ec12531e48de27fbef48a84d4b49d076f59ee5d89381dfc7ff7162f2b4189b7a06e68e166b11d6c2a2b9dd7087d9f6db3252a521c1a2da49edd48c01393869c0731cbc8a9ac11d661c2c68264006ea3f3ade55770192f8be9202b7b675dae6b0672b094d0b1f726cb894c75c4716081af52f46548787b6a06469a571b07ff3507338b552ba43fb8e9247b35e74512d290baa7474b5fa9b0925a702af9428126550185147b863f9c8dca44e33e86225a96556f46891bc52cf8d9e8088b4c0a53eae4bdb0d953c70a6935888c389c226343d503b4ae40a5e9b005f8045a3f2ade64575f84b3a312b14e89d7b5c6db5f4b59dc2caadaa999d691019c8d63982d12188c65350be4e7a65f38c40c989fcedfd043ee3c226112ed91331ce72ac586855e200cd0b2e0d8e6de6c3b6696fab7f95ac54af5d325c0fcdfd1160414ef1b276b7de94d13221f87a902703daaa3c2b9771da5d96011f6ff00cfb7fa9ada4a41aa1f6911f0ec49bf44c279a5a0cc79cf0f7c30bdc829f040c827cd213526d40e2b2ad75e9c32ef24e14b577227a3bb9f4e24b7d6c1b62afe8aa6c2f9527b065214aa47cdca6458008da7e2ab2f5be916c23a58efde0766e73f1d0ee5286daaf59643ca3ef91e04f6ed9774c71c9dbf9c86563b11dca0155787b9f798b8a18cfb10f4accfaee1ed3be2c6442a3e31bd493791285846275c8eaf9d794b4108f982395ca98fe66ef4f6792f9cc59de5e68763356ee0244994f042f6e9d0aedcd2432632c22aad170fd21c9e995d899b86841c715904a1e02446e078c1b816d15ceb9ecba527940be837f69a4c17406f70e1f5192a256a34bfe7b40e249ad58e07b69180e57b5c58c044c4c4e07cda1d3b6f7f3e35ddb939ffc03772b18e3a04aea54e84faab8c6b42363bfe3ed69ebfd7a3678c26dea8378bb75bd5b2be09336b67c238087c52aa02d5ad7f08fd66d71190be4b0b43bb6e496368d24ab664ab1336acc2b4e545b958cecd222f6b8eccdf25bd423d28f6d428fc8a09185c612034fab251f9967b73c0fa9f1f7435e3b2fb2e6d6a3e890f69d59374febe1957cafc8fffa5f06d9dfcebe9edaa0b0000b9e2a377ceb6578f9e49e9b3363494829c9dd978f5c390544b4a930966f4446389119081b65782425dee85820015772c0f9800d006372c122044ecc4d4fa24fa4f7563c954a85741cd2f8414807e029f43209f1fa3ac740c5543d8705422f7d827bd4f9e9ebe1a6bace8d0d8b880609468dd2f8601844d22251cdac98953251215929890d275b77e316b1ba011c164987f7fb8ecd33191dc2b5923a036daa2cf0be799d29b5f7ec7bfdff5fa6bb57647f328914923212de2560cf5c1caa704b582bc1331f18018873a7b17ee4e1b63e35e0af25aca5f1f05d094cca1d84af65afb733fcca1a5eef1043ec8384d81fca44a4e1d813e3ba2d2d22202b2da2a2265b77a641b81306f0cc5539a0907bc49cb0c09662e859d1a6e0f17f2b223369df358ac84912373a0a154b433f34d9e89ebd52daa2692f63a14655b4394ce3841ec23f6caf2b8bd641f0d113c2c9820fd85cd04009a2bc4d7515ac458f90f25\",\n        \"tag\": \"55900950d35345daa1be3d1308036ebe\",\n        \"associated_data\": \"32322d4d61792d32303139\",\n        \"time_created\": \"2019-05-22T13:56:17Z\",\n        \"hash_of_public_key\": \"cfbc586e65816bcdfe905b7f83815c03c66a6cb267e341d744f9d74f1e0fdafd\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/sign/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sign",
+						""
+					]
+				},
+				"description": "Sign the list of open badges with the supplied encrypted private key."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/symmetrickey/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c562c1e-1b26-4432-b088-8096a72b9eb8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains salt\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"salt\");",
+							"});",
+							"pm.test(\"Contains length\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"length\");",
+							"});",
+							"pm.test(\"Contains n\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"n\");",
+							"});",
+							"pm.test(\"Contains r\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"r\");",
+							"});",
+							"pm.test(\"Contains p\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"p\");",
+							"});",
+							"pm.test(\"Contains password_hash\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"password_hash\");",
+							"});",
+							"pm.test(\"Contains hash_of_symmetric_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"hash_of_symmetric_key\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"salt\": \"salty\",\n    \"length\": 32,\n    \"n\": 16384,\n    \"r\": 8,\n    \"p\": 1,\n    \"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/symmetrickey/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"symmetrickey",
+						""
+					]
+				},
+				"description": "Creates a new symmetric key based on supplied params."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/deepvalidate/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f93ece15-6b57-42ca-a6b9-ff7dce5ab0f8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains initialization_vector\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"initialization_vector\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key\");",
+							"});",
+							"pm.test(\"Contains tag\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"tag\");",
+							"});",
+							"pm.test(\"Contains associated_data\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"associated_data\");",
+							"});",
+							"pm.test(\"Contains time_created\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"time_created\");",
+							"});",
+							"pm.test(\"Contains hash_of_public_key\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"hash_of_public_key\");",
+							"});",
+							"pm.test(\"Contains encrypted_private_key_used\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"encrypted_private_key_used\");",
+							"});",
+							"pm.test(\"Contains badge_id\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"badge_id\");",
+							"});",
+							"pm.test(\"Contains badge_hash\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"badge_hash\");",
+							"});",
+							"pm.test(\"Does not contain invalid badges\", function () {",
+							"    pm.expect(pm.response.text()).to.not.include(false);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"signed_badges\": [\n        {\n            \"badge_id\": \"urn:uuid:637006f5-c679-475b-b3c0-c9bd9b67a5e7\",\n            \"signature\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJAY29udGV4dCI6Imh0dHBzOi8vdzNpZC5vcmcvb3BlbmJhZGdlcy92MiIsIkVDVFNFeHRlbnNpb24iOnsiRUNUUyI6IjIifSwiRWR1Y2F0aW9uUHJvZ3JhbUlkZW50aWZpZXJFeHRlbnNpb24iOnsiaWRlbnRpZmllclR5cGUiOiJJU0FUIiwiaWRlbnRpZmllclZhbHVlIjoiMTIzMTIzIn0sIkxhbmd1YWdlRXh0ZW5zaW9uIjp7Imxhbmd1YWdlIjoiZW4iLCJ0eXBlZExhbmd1YWdlIjoiRW5nbGlzaCJ9LCJMZWFybmluZ091dGNvbWVFeHRlbnNpb24iOnsibGVhcm5pbmdPdXRjb21lIjoiSG9wcyBhcmUgYWxzbyB1c2VkIGluIGJyZXdpbmcgZm9yIHRoZWlyIGFudGliYWN0ZXJpYWwgZWZmZWN0IG92ZXIgbGVzcyBkZXNpcmFibGUgbWljcm9vcmdhbmlzbXMgYW5kIGZvciBwdXJwb3J0ZWQgYmVuZWZpdHMgaW5jbHVkaW5nIGJhbGFuY2luZyB0aGUgc3dlZXRuZXNzIG9mIHRoZSBtYWx0IHdpdGggYml0dGVybmVzcyBhbmQgYSB2YXJpZXR5IG9mIGZsYXZvdXJzIGFuZCBhcm9tYXMuWzJdIEhpc3RvcmljYWxseSwgdHJhZGl0aW9uYWwgaGVyYiBjb21iaW5hdGlvbnMgZm9yIGJlZXJzIHdlcmUgYmVsaWV2ZWQgdG8gaGF2ZSBiZWVuIGFiYW5kb25lZCB3aGVuIGJlZXJzIG1hZGUgd2l0aCBob3BzIHdlcmUgbm90aWNlZCB0byBiZSBsZXNzIHByb25lIHRvIHNwb2lsYWdlLls2XSJ9LCJOaXZlYXVFeHRlbnNpb24iOnsiRVFGIjoiMyJ9LCJiYWRnZSI6eyJFQ1RTRXh0ZW5zaW9uIjp7IkVDVFMiOiIyIn0sIkVkdWNhdGlvblByb2dyYW1JZGVudGlmaWVyRXh0ZW5zaW9uIjp7ImlkZW50aWZpZXJUeXBlIjoiSVNBVCIsImlkZW50aWZpZXJWYWx1ZSI6IjEyMzEyMyJ9LCJMYW5ndWFnZUV4dGVuc2lvbiI6eyJsYW5ndWFnZSI6ImVuIiwidHlwZWRMYW5ndWFnZSI6IkVuZ2xpc2gifSwiTGVhcm5pbmdPdXRjb21lRXh0ZW5zaW9uIjp7ImxlYXJuaW5nT3V0Y29tZSI6IkhvcHMgYXJlIGFsc28gdXNlZCBpbiBicmV3aW5nIGZvciB0aGVpciBhbnRpYmFjdGVyaWFsIGVmZmVjdCBvdmVyIGxlc3MgZGVzaXJhYmxlIG1pY3Jvb3JnYW5pc21zIGFuZCBmb3IgcHVycG9ydGVkIGJlbmVmaXRzIGluY2x1ZGluZyBiYWxhbmNpbmcgdGhlIHN3ZWV0bmVzcyBvZiB0aGUgbWFsdCB3aXRoIGJpdHRlcm5lc3MgYW5kIGEgdmFyaWV0eSBvZiBmbGF2b3VycyBhbmQgYXJvbWFzLlsyXSBIaXN0b3JpY2FsbHksIHRyYWRpdGlvbmFsIGhlcmIgY29tYmluYXRpb25zIGZvciBiZWVycyB3ZXJlIGJlbGlldmVkIHRvIGhhdmUgYmVlbiBhYmFuZG9uZWQgd2hlbiBiZWVycyBtYWRlIHdpdGggaG9wcyB3ZXJlIG5vdGljZWQgdG8gYmUgbGVzcyBwcm9uZSB0byBzcG9pbGFnZS5bNl0ifSwiTml2ZWF1RXh0ZW5zaW9uIjp7IkVRRiI6IjMifSwiYWxpZ25tZW50IjpbeyJ0YXJnZXREZXNjcmlwdGlvbiI6IkhvcHMgYXJlIHRoZSBmbG93ZXJzIChhbHNvIGNhbGxlZCBzZWVkIGNvbmVzIG9yIHN0cm9iaWxlcykgb2YgdGhlIGhvcCBwbGFudCBIdW11bHVzIGx1cHVsdXMuWzFdIFRoZXkgYXJlIHVzZWQgcHJpbWFyaWx5IGFzIGEgYml0dGVyaW5nLCBmbGF2b3VyaW5nLCBhbmQgc3RhYmlsaXR5IGFnZW50IGluIGJlZXIsIHRvIHdoaWNoIHRoZXkgaW1wYXJ0LCBpbiBhZGRpdGlvbiB0byBiaXR0ZXJuZXNzLCBmbG9yYWwsIGZydWl0eSwgb3IgY2l0cmljIGZsYXZvdXJzIGFuZCBhcm9tYXMuWzJdIEhvcHMgYXJlIGFsc28gdXNlZCBmb3IgdmFyaW91cyBwdXJwb3NlcyBpbiBvdGhlciBiZXZlcmFnZXMgYW5kIGhlcmJhbCBtZWRpY2luZS4gVGhlIGhvcCBwbGFudCBpcyBhIHZpZ29yb3VzLCBjbGltYmluZywgaGVyYmFjZW91cyBwZXJlbm5pYWwsIHVzdWFsbHkgdHJhaW5lZCB0byBncm93IHVwIHN0cmluZ3MgaW4gYSBmaWVsZCBjYWxsZWQgYSBob3BmaWVsZCwgaG9wIGdhcmRlbiAobm9tZW5jbGF0dXJlIGluIHRoZSBTb3V0aCBvZiBFbmdsYW5kKSwgb3IgaG9wIHlhcmQgKGluIHRoZSBXZXN0IENvdW50cnkgYW5kIFVTKSB3aGVuIGdyb3duIGNvbW1lcmNpYWxseS4gTWFueSBkaWZmZXJlbnQgdmFyaWV0aWVzIG9mIGhvcHMgYXJlIGdyb3duIGJ5IGZhcm1lcnMgYXJvdW5kIHRoZSB3b3JsZCwgd2l0aCBkaWZmZXJlbnQgdHlwZXMgdXNlZCBmb3IgcGFydGljdWxhciBzdHlsZXMgb2YgYmVlci4iLCJ0YXJnZXROYW1lIjoiSG9wcyIsInRhcmdldFVybCI6Imh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0hvcHMifV0sImNyaXRlcmlhIjp7ImlkIjoiaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvSG9wcyIsIm5hcnJhdGl2ZSI6IlRoZSBtYXN0ZXIgYnJld2VyIGtub3dzIGhpcyBob3BzLiJ9LCJkZXNjcmlwdGlvbiI6IkhvcHMgYXJlIGFsc28gdXNlZCBpbiBicmV3aW5nIGZvciB0aGVpciBhbnRpYmFjdGVyaWFsIGVmZmVjdCBvdmVyIGxlc3MgZGVzaXJhYmxlIG1pY3Jvb3JnYW5pc21zIGFuZCBmb3IgcHVycG9ydGVkIGJlbmVmaXRzIGluY2x1ZGluZyBiYWxhbmNpbmcgdGhlIHN3ZWV0bmVzcyBvZiB0aGUgbWFsdCB3aXRoIGJpdHRlcm5lc3MgYW5kIGEgdmFyaWV0eSBvZiBmbGF2b3VycyBhbmQgYXJvbWFzLlsyXSBIaXN0b3JpY2FsbHksIHRyYWRpdGlvbmFsIGhlcmIgY29tYmluYXRpb25zIGZvciBiZWVycyB3ZXJlIGJlbGlldmVkIHRvIGhhdmUgYmVlbiBhYmFuZG9uZWQgd2hlbiBiZWVycyBtYWRlIHdpdGggaG9wcyB3ZXJlIG5vdGljZWQgdG8gYmUgbGVzcyBwcm9uZSB0byBzcG9pbGFnZS5bNl0iLCJpZCI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYmFkZ2VzL2lJb3VteG1rVElpaWFmWDc0dHpqVlEiLCJpbWFnZSI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYmFkZ2VzL2lJb3VteG1rVElpaWFmWDc0dHpqVlEvaW1hZ2UiLCJpc3N1ZXIiOnsiR3JhZGluZ1RhYmxlRXh0ZW5zaW9uIjp7ImdyYWRpbmdUYWJsZSI6Imh0dHBzOi8vd3d3LnJ1Zy5ubC9lZHVjYXRpb24vYmFjaGVsb3IvaW50ZXJuYXRpb25hbC1zdHVkZW50cy9zdHVkeS1jaG9pY2UtYW5kLWluZm9ybWF0aW9uL3RoZS1lY3RzLWdyYWRpbmctdGFibGUifSwiSW5zdGl0dXRpb25JZGVudGlmaWVyRXh0ZW5zaW9uIjp7Imluc3RpdHV0aW9uSWRlbnRpZmllciI6IkpIR0RHRiJ9LCJkZXNjcmlwdGlvbiI6IlRlc3QgSXNzdWVyIiwiZW1haWwiOiJmcmFucy53YXJkQHN1cmZuZXQubmwiLCJpZCI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvaXNzdWVycy90UjZCbnN5NFNIYXExbzU4NjB5T3NBIiwiaW1hZ2UiOiJodHRwczovL2JhZGdyLXBpbG90Mi5lZHViYWRnZXMubmwvcHVibGljL2lzc3VlcnMvdFI2Qm5zeTRTSGFxMW81ODYweU9zQS9pbWFnZSIsIm5hbWUiOiJSZXdhcmQgQnJld2hvdXNlIiwicHVibGljS2V5Ijp7ImlkIjoiaHR0cHM6Ly9leGFtcGxlLm9yZy9wdWJsaWNLZXkuanNvbiIsIm93bmVyIjoiaHR0cHM6Ly9iYWRnci1waWxvdDIuZWR1YmFkZ2VzLm5sL3B1YmxpYy9pc3N1ZXJzL3RSNkJuc3k0U0hhcTFvNTg2MHlPc0EiLCJwdWJsaWNLZXlQZW0iOiItLS0tLUJFR0lOIFBVQkxJQyBLRVktLS0tLVxuTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUE2K1FEaGpXVDRRbVppaTNGai9XV1xuQ0pic3FVWmYxM2xpem5QaFVMY2pLUlhLWk5LKy9zTiswRkp1djEvUTNOUUxiQzFZQXA3bG9hcjBJTzdWVk1tSVxuaXNhRytBdFhhTTlPMmY0eC9zcTlaV1BYaWNpcm11VXJ0a0Qxek0yK3VDbDZTNW9TaVNwWDRaNk1HNHd1QnZXclxuTzRhMEJWYSthZkxHSDBnS1RVSjJueTdaQUJZeFhHWktOU0RKalZGVVB5TXIyb05ZcG43RUJSTlU0YTd2dTNMTVxuUlVkdzUySXNsaGl6VGt2R2VjaDEwS3JSZTVObjI3cHlFSnpINWlkR2h0R1JPUnBkOG52QnFIWmRLdTN3UGx1L1xua1FKZDNrb3BrbGxjWFlxSHVsVzlBZlVKeExiTGFsTkM2K1BLbjF0N2xUa0lKd0s0T0RBS3VxSDdKRzEzOURUK1xuZW1WemxzNFl4SXV1eVdWNXY1cm5wMDhHSHpUZE4xdlRDWGVLcGI0Tm13eDRQR3ZIUHA4Y1JYUGxia3E2MFJwQ1xuTE5FZXpEMzY3WWJKR3Q2M0c1MVEvdXAvU0xQNWk2ZE44UWErdGUrTTE3TW1XTjN0U1hHWTAyZzNyNUFjdGxyZFxuTktpWDh2SHRmRGVnSVlLRHpzM0EyVUJmTEJJVGNnZWF4SzdQbzFhTUhOanJ2cmprMnliRFpGcmx3Q1ZRdENoSFxuQWR6b0lXUVg4SHY1Tkt6OHo4VUtCSUNCazI2aTg2MHdhM2hBWWtVZ0ZsSzliRWVFVTIyaDQ0cGtVUktQb2s2VFxuaThqSStkWVJlbmdudmMwVkh5U2RnaVZlZUZQbFoxTm5ldCtKWUhxdy94RDd5SVZGbmh6WGEyOXU0Vm9qQjRVT1xuNE5XOVh3Zy9RdHpsZS94SjFBUFFGRWtDQXdFQUFRPT1cbi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLSIsInR5cGUiOiJDcnlwdG9ncmFwaGljS2V5In0sInR5cGUiOiJJc3N1ZXIiLCJ1cmwiOiJodHRwczovL3BpbG90Mi5lZHViYWRnZXMubmwvaXNzdWVyL2lzc3VlcnMvdFI2Qm5zeTRTSGFxMW81ODYweU9zQSJ9LCJuYW1lIjoiTWFzdGVyIGJyZXdlciIsInRhZ3MiOlsiaG9wcyIsImJlZXIiXSwidHlwZSI6IkJhZGdlQ2xhc3MifSwiZXZpZGVuY2UiOlt7Im5hcnJhdGl2ZSI6IkV2aWRlbmNlOiAgSG93IGlzIHRoaXMgYmFkZ2UgZWFybmVkPyIsInR5cGUiOiJFdmlkZW5jZSJ9XSwiZXh0ZW5zaW9uczpyZWNpcGllbnRQcm9maWxlIjp7IkBjb250ZXh0IjoiaHR0cHM6Ly9vcGVuYmFkZ2VzcGVjLm9yZy9leHRlbnNpb25zL3JlY2lwaWVudFByb2ZpbGUvY29udGV4dC5qc29uIiwibmFtZSI6IlNhbmRlciBLalx1MDBlNnIiLCJ0eXBlIjpbIkV4dGVuc2lvbiIsImV4dGVuc2lvbnM6UmVjaXBpZW50UHJvZmlsZSJdfSwiaWQiOiJ1cm46dXVpZDo2MzcwMDZmNS1jNjc5LTQ3NWItYjNjMC1jOWJkOWI2N2E1ZTciLCJpbWFnZSI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYXNzZXJ0aW9ucy96QldoeHE1N1QwMnpMTTlvWVZwSTJ3L2ltYWdlIiwiaXNzdWVkT24iOiIyMDE5LTA1LTA3VDA5OjEwOjI0LjAyMDMzNyswMDowMCIsIm5hcnJhdGl2ZSI6Ik5hcnJhdGl2ZTogIEhvdyBkaWQgdGhlIHJlY2lwaWVudHMgZWFybiB0aGlzIGJhZGdlPyIsInJlY2lwaWVudCI6eyJoYXNoZWQiOnRydWUsImlkZW50aXR5Ijoic2hhMjU2JDBlMDc0MDkxZTVjZThjMzYwMDg3MTUxNjc2YTAzMzAyZDNmYmZmOTVhZTE0NTk1Yzc4MmVmYWNmZDk5ZThiNWQiLCJzYWx0IjoiY2M4ZGRhZTAzODhlNGZmYThmYzQyYzRhMjBhMDFjNjYiLCJ0eXBlIjoiaWQifSwidHlwZSI6IkFzc2VydGlvbiIsInZlcmlmaWNhdGlvbiI6eyJjcmVhdG9yIjoiaHR0cHM6Ly9leGFtcGxlLm9yZy9wdWJsaWNLZXkuanNvbiIsInR5cGUiOiJTaWduZWRCYWRnZSJ9fQ.GuxtAaURpCau8ADesmKri0rDhC_JYWpc_6UpLGTt7AONZBVojxdC1SVnYnYH-N1nkQo74siLgZMRp0Zh5XvPHOeEuA6hG5PmEYzvkYctJck8Hrm8dtvMbC_7UJAZ2h8C_jE8l9FPk_7bXkUFLNA-7M4QA8_PAE8ZE4cLdG5XKM45k4cLJhB9ejOsBOGCVP2MB4nwJXgIuanSgjrTXPGhoylEOkPdJbWrNrFH8Sl9J4bFKBoYAXcw4jXKhFIis2VARG6t7eHM2yX67jtSwICbJ7IOXWFVaxYu21j8Nehonum54KqPuYbO-ErWv_KqYDSntDucqtdojWB22kYFI_LRt40uOcmRKoejxLgBN8gbmArKaKVU2WmVz7a5vpzO9LJeeR-ln3X64LDb3K8Vt0IQYnVevkOBFuinacKG6AdbLeMSF9czkpHy_yxch1vYvagMUCkvsfIM5xhHZytZsEzeHbUPH9GHzsXS9dmsBEm6SYBhsmF5ZH-4ZhOz_XT1UFPfOdOF_4csl-urCTglgrNBYle4dBIQQHkEK-7H2vAcNBGlqVT2Hzh2f1WPFgJcTORiNSgO5dTEUJLTByxmdZUiv_EN9ZRuhI7ieXz0u1U9tazUyR7BU39Ywrr21qKSjlW3Ij_WTAAftRp07p8nBzkUBpWWlxD3ViRvnGHu7S4M70c\"\n        },\n        {\n            \"badge_id\": \"urn:uuid:637006f5-c679-475b-b3c0-c9bd9b67a5e7\",\n            \"signature\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJAY29udGV4dCI6Imh0dHBzOi8vdzNpZC5vcmcvb3BlbmJhZGdlcy92MiIsIkVDVFNFeHRlbnNpb24iOnsiRUNUUyI6IjIifSwiRWR1Y2F0aW9uUHJvZ3JhbUlkZW50aWZpZXJFeHRlbnNpb24iOnsiaWRlbnRpZmllclR5cGUiOiJJU0FUIiwiaWRlbnRpZmllclZhbHVlIjoiMTIzMTIzIn0sIkxhbmd1YWdlRXh0ZW5zaW9uIjp7Imxhbmd1YWdlIjoiZW4iLCJ0eXBlZExhbmd1YWdlIjoiRW5nbGlzaCJ9LCJMZWFybmluZ091dGNvbWVFeHRlbnNpb24iOnsibGVhcm5pbmdPdXRjb21lIjoiSG9wcyBhcmUgYWxzbyB1c2VkIGluIGJyZXdpbmcgZm9yIHRoZWlyIGFudGliYWN0ZXJpYWwgZWZmZWN0IG92ZXIgbGVzcyBkZXNpcmFibGUgbWljcm9vcmdhbmlzbXMgYW5kIGZvciBwdXJwb3J0ZWQgYmVuZWZpdHMgaW5jbHVkaW5nIGJhbGFuY2luZyB0aGUgc3dlZXRuZXNzIG9mIHRoZSBtYWx0IHdpdGggYml0dGVybmVzcyBhbmQgYSB2YXJpZXR5IG9mIGZsYXZvdXJzIGFuZCBhcm9tYXMuWzJdIEhpc3RvcmljYWxseSwgdHJhZGl0aW9uYWwgaGVyYiBjb21iaW5hdGlvbnMgZm9yIGJlZXJzIHdlcmUgYmVsaWV2ZWQgdG8gaGF2ZSBiZWVuIGFiYW5kb25lZCB3aGVuIGJlZXJzIG1hZGUgd2l0aCBob3BzIHdlcmUgbm90aWNlZCB0byBiZSBsZXNzIHByb25lIHRvIHNwb2lsYWdlLls2XSJ9LCJOaXZlYXVFeHRlbnNpb24iOnsiRVFGIjoiMyJ9LCJiYWRnZSI6eyJFQ1RTRXh0ZW5zaW9uIjp7IkVDVFMiOiIyIn0sIkVkdWNhdGlvblByb2dyYW1JZGVudGlmaWVyRXh0ZW5zaW9uIjp7ImlkZW50aWZpZXJUeXBlIjoiSVNBVCIsImlkZW50aWZpZXJWYWx1ZSI6IjEyMzEyMyJ9LCJMYW5ndWFnZUV4dGVuc2lvbiI6eyJsYW5ndWFnZSI6ImVuIiwidHlwZWRMYW5ndWFnZSI6IkVuZ2xpc2gifSwiTGVhcm5pbmdPdXRjb21lRXh0ZW5zaW9uIjp7ImxlYXJuaW5nT3V0Y29tZSI6IkhvcHMgYXJlIGFsc28gdXNlZCBpbiBicmV3aW5nIGZvciB0aGVpciBhbnRpYmFjdGVyaWFsIGVmZmVjdCBvdmVyIGxlc3MgZGVzaXJhYmxlIG1pY3Jvb3JnYW5pc21zIGFuZCBmb3IgcHVycG9ydGVkIGJlbmVmaXRzIGluY2x1ZGluZyBiYWxhbmNpbmcgdGhlIHN3ZWV0bmVzcyBvZiB0aGUgbWFsdCB3aXRoIGJpdHRlcm5lc3MgYW5kIGEgdmFyaWV0eSBvZiBmbGF2b3VycyBhbmQgYXJvbWFzLlsyXSBIaXN0b3JpY2FsbHksIHRyYWRpdGlvbmFsIGhlcmIgY29tYmluYXRpb25zIGZvciBiZWVycyB3ZXJlIGJlbGlldmVkIHRvIGhhdmUgYmVlbiBhYmFuZG9uZWQgd2hlbiBiZWVycyBtYWRlIHdpdGggaG9wcyB3ZXJlIG5vdGljZWQgdG8gYmUgbGVzcyBwcm9uZSB0byBzcG9pbGFnZS5bNl0ifSwiTml2ZWF1RXh0ZW5zaW9uIjp7IkVRRiI6IjMifSwiYWxpZ25tZW50IjpbeyJ0YXJnZXREZXNjcmlwdGlvbiI6IkhvcHMgYXJlIHRoZSBmbG93ZXJzIChhbHNvIGNhbGxlZCBzZWVkIGNvbmVzIG9yIHN0cm9iaWxlcykgb2YgdGhlIGhvcCBwbGFudCBIdW11bHVzIGx1cHVsdXMuWzFdIFRoZXkgYXJlIHVzZWQgcHJpbWFyaWx5IGFzIGEgYml0dGVyaW5nLCBmbGF2b3VyaW5nLCBhbmQgc3RhYmlsaXR5IGFnZW50IGluIGJlZXIsIHRvIHdoaWNoIHRoZXkgaW1wYXJ0LCBpbiBhZGRpdGlvbiB0byBiaXR0ZXJuZXNzLCBmbG9yYWwsIGZydWl0eSwgb3IgY2l0cmljIGZsYXZvdXJzIGFuZCBhcm9tYXMuWzJdIEhvcHMgYXJlIGFsc28gdXNlZCBmb3IgdmFyaW91cyBwdXJwb3NlcyBpbiBvdGhlciBiZXZlcmFnZXMgYW5kIGhlcmJhbCBtZWRpY2luZS4gVGhlIGhvcCBwbGFudCBpcyBhIHZpZ29yb3VzLCBjbGltYmluZywgaGVyYmFjZW91cyBwZXJlbm5pYWwsIHVzdWFsbHkgdHJhaW5lZCB0byBncm93IHVwIHN0cmluZ3MgaW4gYSBmaWVsZCBjYWxsZWQgYSBob3BmaWVsZCwgaG9wIGdhcmRlbiAobm9tZW5jbGF0dXJlIGluIHRoZSBTb3V0aCBvZiBFbmdsYW5kKSwgb3IgaG9wIHlhcmQgKGluIHRoZSBXZXN0IENvdW50cnkgYW5kIFVTKSB3aGVuIGdyb3duIGNvbW1lcmNpYWxseS4gTWFueSBkaWZmZXJlbnQgdmFyaWV0aWVzIG9mIGhvcHMgYXJlIGdyb3duIGJ5IGZhcm1lcnMgYXJvdW5kIHRoZSB3b3JsZCwgd2l0aCBkaWZmZXJlbnQgdHlwZXMgdXNlZCBmb3IgcGFydGljdWxhciBzdHlsZXMgb2YgYmVlci4iLCJ0YXJnZXROYW1lIjoiSG9wcyIsInRhcmdldFVybCI6Imh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0hvcHMifV0sImNyaXRlcmlhIjp7ImlkIjoiaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvSG9wcyIsIm5hcnJhdGl2ZSI6IlRoZSBtYXN0ZXIgYnJld2VyIGtub3dzIGhpcyBob3BzLiJ9LCJkZXNjcmlwdGlvbiI6IkhvcHMgYXJlIGFsc28gdXNlZCBpbiBicmV3aW5nIGZvciB0aGVpciBhbnRpYmFjdGVyaWFsIGVmZmVjdCBvdmVyIGxlc3MgZGVzaXJhYmxlIG1pY3Jvb3JnYW5pc21zIGFuZCBmb3IgcHVycG9ydGVkIGJlbmVmaXRzIGluY2x1ZGluZyBiYWxhbmNpbmcgdGhlIHN3ZWV0bmVzcyBvZiB0aGUgbWFsdCB3aXRoIGJpdHRlcm5lc3MgYW5kIGEgdmFyaWV0eSBvZiBmbGF2b3VycyBhbmQgYXJvbWFzLlsyXSBIaXN0b3JpY2FsbHksIHRyYWRpdGlvbmFsIGhlcmIgY29tYmluYXRpb25zIGZvciBiZWVycyB3ZXJlIGJlbGlldmVkIHRvIGhhdmUgYmVlbiBhYmFuZG9uZWQgd2hlbiBiZWVycyBtYWRlIHdpdGggaG9wcyB3ZXJlIG5vdGljZWQgdG8gYmUgbGVzcyBwcm9uZSB0byBzcG9pbGFnZS5bNl0iLCJpZCI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYmFkZ2VzL2lJb3VteG1rVElpaWFmWDc0dHpqVlEiLCJpbWFnZSI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYmFkZ2VzL2lJb3VteG1rVElpaWFmWDc0dHpqVlEvaW1hZ2UiLCJpc3N1ZXIiOnsiR3JhZGluZ1RhYmxlRXh0ZW5zaW9uIjp7ImdyYWRpbmdUYWJsZSI6Imh0dHBzOi8vd3d3LnJ1Zy5ubC9lZHVjYXRpb24vYmFjaGVsb3IvaW50ZXJuYXRpb25hbC1zdHVkZW50cy9zdHVkeS1jaG9pY2UtYW5kLWluZm9ybWF0aW9uL3RoZS1lY3RzLWdyYWRpbmctdGFibGUifSwiSW5zdGl0dXRpb25JZGVudGlmaWVyRXh0ZW5zaW9uIjp7Imluc3RpdHV0aW9uSWRlbnRpZmllciI6IkpIR0RHRiJ9LCJkZXNjcmlwdGlvbiI6IlRlc3QgSXNzdWVyIiwiZW1haWwiOiJmcmFucy53YXJkQHN1cmZuZXQubmwiLCJpZCI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvaXNzdWVycy90UjZCbnN5NFNIYXExbzU4NjB5T3NBIiwiaW1hZ2UiOiJodHRwczovL2JhZGdyLXBpbG90Mi5lZHViYWRnZXMubmwvcHVibGljL2lzc3VlcnMvdFI2Qm5zeTRTSGFxMW81ODYweU9zQS9pbWFnZSIsIm5hbWUiOiJSZXdhcmQgQnJld2hvdXNlIiwicHVibGljS2V5Ijp7ImlkIjoiaHR0cHM6Ly9leGFtcGxlLm9yZy9wdWJsaWNLZXkuanNvbiIsIm93bmVyIjoiaHR0cHM6Ly9iYWRnci1waWxvdDIuZWR1YmFkZ2VzLm5sL3B1YmxpYy9pc3N1ZXJzL3RSNkJuc3k0U0hhcTFvNTg2MHlPc0EiLCJwdWJsaWNLZXlQZW0iOiItLS0tLUJFR0lOIFBVQkxJQyBLRVktLS0tLVxuTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUE2K1FEaGpXVDRRbVppaTNGai9XV1xuQ0pic3FVWmYxM2xpem5QaFVMY2pLUlhLWk5LKy9zTiswRkp1djEvUTNOUUxiQzFZQXA3bG9hcjBJTzdWVk1tSVxuaXNhRytBdFhhTTlPMmY0eC9zcTlaV1BYaWNpcm11VXJ0a0Qxek0yK3VDbDZTNW9TaVNwWDRaNk1HNHd1QnZXclxuTzRhMEJWYSthZkxHSDBnS1RVSjJueTdaQUJZeFhHWktOU0RKalZGVVB5TXIyb05ZcG43RUJSTlU0YTd2dTNMTVxuUlVkdzUySXNsaGl6VGt2R2VjaDEwS3JSZTVObjI3cHlFSnpINWlkR2h0R1JPUnBkOG52QnFIWmRLdTN3UGx1L1xua1FKZDNrb3BrbGxjWFlxSHVsVzlBZlVKeExiTGFsTkM2K1BLbjF0N2xUa0lKd0s0T0RBS3VxSDdKRzEzOURUK1xuZW1WemxzNFl4SXV1eVdWNXY1cm5wMDhHSHpUZE4xdlRDWGVLcGI0Tm13eDRQR3ZIUHA4Y1JYUGxia3E2MFJwQ1xuTE5FZXpEMzY3WWJKR3Q2M0c1MVEvdXAvU0xQNWk2ZE44UWErdGUrTTE3TW1XTjN0U1hHWTAyZzNyNUFjdGxyZFxuTktpWDh2SHRmRGVnSVlLRHpzM0EyVUJmTEJJVGNnZWF4SzdQbzFhTUhOanJ2cmprMnliRFpGcmx3Q1ZRdENoSFxuQWR6b0lXUVg4SHY1Tkt6OHo4VUtCSUNCazI2aTg2MHdhM2hBWWtVZ0ZsSzliRWVFVTIyaDQ0cGtVUktQb2s2VFxuaThqSStkWVJlbmdudmMwVkh5U2RnaVZlZUZQbFoxTm5ldCtKWUhxdy94RDd5SVZGbmh6WGEyOXU0Vm9qQjRVT1xuNE5XOVh3Zy9RdHpsZS94SjFBUFFGRWtDQXdFQUFRPT1cbi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLSIsInR5cGUiOiJDcnlwdG9ncmFwaGljS2V5In0sInR5cGUiOiJJc3N1ZXIiLCJ1cmwiOiJodHRwczovL3BpbG90Mi5lZHViYWRnZXMubmwvaXNzdWVyL2lzc3VlcnMvdFI2Qm5zeTRTSGFxMW81ODYweU9zQSJ9LCJuYW1lIjoiTWFzdGVyIGJyZXdlciIsInRhZ3MiOlsiaG9wcyIsImJlZXIiXSwidHlwZSI6IkJhZGdlQ2xhc3MifSwiZXZpZGVuY2UiOlt7Im5hcnJhdGl2ZSI6IkV2aWRlbmNlOiAgSG93IGlzIHRoaXMgYmFkZ2UgZWFybmVkPyIsInR5cGUiOiJFdmlkZW5jZSJ9XSwiZXh0ZW5zaW9uczpyZWNpcGllbnRQcm9maWxlIjp7IkBjb250ZXh0IjoiaHR0cHM6Ly9vcGVuYmFkZ2VzcGVjLm9yZy9leHRlbnNpb25zL3JlY2lwaWVudFByb2ZpbGUvY29udGV4dC5qc29uIiwibmFtZSI6IlNhbmRlciBLalx1MDBlNnIiLCJ0eXBlIjpbIkV4dGVuc2lvbiIsImV4dGVuc2lvbnM6UmVjaXBpZW50UHJvZmlsZSJdfSwiaWQiOiJ1cm46dXVpZDo2MzcwMDZmNS1jNjc5LTQ3NWItYjNjMC1jOWJkOWI2N2E1ZTciLCJpbWFnZSI6Imh0dHBzOi8vYmFkZ3ItcGlsb3QyLmVkdWJhZGdlcy5ubC9wdWJsaWMvYXNzZXJ0aW9ucy96QldoeHE1N1QwMnpMTTlvWVZwSTJ3L2ltYWdlIiwiaXNzdWVkT24iOiIyMDE5LTA1LTA3VDA5OjEwOjI0LjAyMDMzNyswMDowMCIsIm5hcnJhdGl2ZSI6Ik5hcnJhdGl2ZTogIEhvdyBkaWQgdGhlIHJlY2lwaWVudHMgZWFybiB0aGlzIGJhZGdlPyIsInJlY2lwaWVudCI6eyJoYXNoZWQiOnRydWUsImlkZW50aXR5Ijoic2hhMjU2JDBlMDc0MDkxZTVjZThjMzYwMDg3MTUxNjc2YTAzMzAyZDNmYmZmOTVhZTE0NTk1Yzc4MmVmYWNmZDk5ZThiNWQiLCJzYWx0IjoiY2M4ZGRhZTAzODhlNGZmYThmYzQyYzRhMjBhMDFjNjYiLCJ0eXBlIjoiaWQifSwidHlwZSI6IkFzc2VydGlvbiIsInZlcmlmaWNhdGlvbiI6eyJjcmVhdG9yIjoiaHR0cHM6Ly9leGFtcGxlLm9yZy9wdWJsaWNLZXkuanNvbiIsInR5cGUiOiJTaWduZWRCYWRnZSJ9fQ.GuxtAaURpCau8ADesmKri0rDhC_JYWpc_6UpLGTt7AONZBVojxdC1SVnYnYH-N1nkQo74siLgZMRp0Zh5XvPHOeEuA6hG5PmEYzvkYctJck8Hrm8dtvMbC_7UJAZ2h8C_jE8l9FPk_7bXkUFLNA-7M4QA8_PAE8ZE4cLdG5XKM45k4cLJhB9ejOsBOGCVP2MB4nwJXgIuanSgjrTXPGhoylEOkPdJbWrNrFH8Sl9J4bFKBoYAXcw4jXKhFIis2VARG6t7eHM2yX67jtSwICbJ7IOXWFVaxYu21j8Nehonum54KqPuYbO-ErWv_KqYDSntDucqtdojWB22kYFI_LRt40uOcmRKoejxLgBN8gbmArKaKVU2WmVz7a5vpzO9LJeeR-ln3X64LDb3K8Vt0IQYnVevkOBFuinacKG6AdbLeMSF9czkpHy_yxch1vYvagMUCkvsfIM5xhHZytZsEzeHbUPH9GHzsXS9dmsBEm6SYBhsmF5ZH-4ZhOz_XT1UFPfOdOF_4csl-urCTglgrNBYle4dBIQQHkEK-7H2vAcNBGlqVT2Hzh2f1WPFgJcTORiNSgO5dTEUJLTByxmdZUiv_EN9ZRuhI7ieXz0u1U9tazUyR7BU39Ywrr21qKSjlW3Ij_WTAAftRp07p8nBzkUBpWWlxD3ViRvnGHu7S4M70c\"\n        }\n    ],\n    \"symmetric_key\": {\n        \"salt\": \"salty\",\n        \"length\": 32,\n        \"n\": 16384,\n        \"r\": 8,\n        \"p\": 1,\n        \"password\": \"password\"\n    },\n    \"private_key\": {\n        \"initialization_vector\": \"39473e0d418ecd63b9a56a08\",\n        \"encrypted_private_key\": \"e8aea6c77fcefe5c4cf266287eac750ede3c43a6254ee2f89ec72e422faffe5efead735f732c4129f7f92c1669c45c4bab42da402ec10c469ab1dba212cf586f5f7292c89d94f82069185eceb1dab4a95f4d4c1d8aa8b4dd644778cbae50c5230f7d7f2903e3658d6e0e0acc40f3cb5032b1e9820c698a898f1dbab6db01c7092041baf57bffefeeb858419f130a98bc1fdd135cb356115af78a34b7d21479f213c3fb51f2a09fe4c4bc57723bff618fe5c56f5fe3ebc3c96a756555b4286996ff9a2b504f9d714ce491ab16580f6d99991711895ceea0d71d8648ad216125c10e26609e919ef7570e7008c8ab272edaf00ed5b18154cfd92737c1f6584dd3d86be3ec8c3605669127c7a2a91649fb3da11c225cc48c2e28364cbffb61c408684824038995bda51f7328492e6d7bc340e131ae22931090bf470b6b088e847258b35f609e2f2f89c7335f1a7622d5fae48829cbbb7b11be1d2b5b2b583f50e2f933d9c198532dceda23ed47810dbe3880d58cd64b573df5ef77f54e2f978135da83e04613c213c4395bc8722e617239ed8553fa3d3632e856326538cfa7b328d8aa87328378af6038b91dee937f0baa4db4604650c1825c0b813606c9e5f7afd39ed2dacdaf841d1f05e25591ff006b8134a98d75d63798143756c9a5d3612d0227cd70aa2045b34a8698402bca2688dd5ae1d13b2e04c471d57f71cd6b38e8369994c7f4d16bf55b2abf4d88316dd6e516302bfbe7bb895f2ce3da6343845a315d235c47c5e3355b80186d2b8290b50939d8650f2832ca576c177a8c88facc779834834d33b1fcf123122493605c63e042ca9cc28ef73935cd59d710f28461f0ed0de9140f33777f77a31335e55e1925e10f72f21d992ac8f2d9e273c4f5e5ca2d42dbf8eb4d1222d11de67ba0208641b528c7cdaee6e56fd6eacc150dc6bf3828dd3f17c6c18af0c2786da2fb6a5ca9ef83cbfb7df380b18eb1a37c042818e6171809637ee1dddd0b4e33141034ad07b25a5e9547f5ab6d9409663f18be8a46bca93c19ce9ebbd56c27d8355da36c1856a81c389250dad71b6476a8214802edd0f279e388e3d9a7c29db5cd9f71181aeba7b6cb72e7a741b151b1bd6dfc30ab0bd32577e30916518d078c593d2ade7068a69e1a87a9146e54b96b56f171a31163d9d4700128021e7c16409a18fb4871bad1eaa4a2c9dd90275dff76fe71b4c09a4a1dd84379aec9b40651b20aa4a8306c66caaab7e9c7ad25c677a147e242caabbdf7c313f8676c09264a20f4a2e88ac3414a8d763f06852107571d97b31c34360c8b2cd0bf960e04409a64612113bd73043d330adb00a67f0ba7e28a2292838efa2e55a07ea7334af8d1acd576f232b582bba4e696dea3e28d11d8a63f64e5c026ecc3524866785c6e245b89758562f3b0a80af097b34591f78e4d0d2233880ccc717812fd02dbd91f7c5acbdea30b2eb2210a6f17e30382b2143f98830bad57abc7cb43af8c305b3c37372240d7039c0a398a01a6b11c4e62f178cbcf161f4c0a1e359bb49ee420676d40f0d675ed68e05200764b7268553a2a7727e98e74a6f1f7835e4678035b5a73dd094cc2cbbd39bd0f992d7b13e52c78f5e0d45fd5793b11413c1f222c8a352161d0efb2bb340be268e5094e045bf6fbbfd03a674b4dc106e3743033c69246d337999f617da8367dbdfb1edff67597dac14ed1b7c356f536331c8c8d54d3e8f0158176e56c04b2697b73bb3561a258ad318f9bb42e196035009f27f056ef8be020491b44fd668af537bf4e58f84f3b0df284aac64a39967e172eb79ee8a04072791c6fa7f73a5138332af70c0b24e6b87c0eba133556c9ee616221866b0aed9efc912e3bd32c1320cfea0d4326bfd4a54389c82721c667492fa11293624a8c0760eb7db40e6e12dc113c70e55fb4a27ba60573772c0638c20f14d577a15326dff91b853ccea3e2d79611e167dc39c496497eec4ddfd8eac2ef053c76b34828cbe40517fb8692df44ea69fbd91cdb1206c02ccbebf21b7bbee5745ac7940da2323f91287c8299bc0239d7c73efbbb8fe8fd4728645615823eb4359eca4aba761eea59d0e01ea40e1db0551fc736e96ca7f043c664d55f6814c1ac467cb1b933f8b178fcf116005f20ae4ba9d9470369cbf035c6769566f56cf77d6854559a28245f640df22125201ed4888b66f3c9cdd8c5b4edcb4868469622568bac8312971a74a3e09d88c8d1c66d0d15d654655ca08ff4b3111f4ba5def01c65e7fd37bc1ab5f3c3702008fc35054a88175e561e8cc2ad875b608c9dd89f7420a02a61650a00490c710e9e2bac7286f231607508dce5130b2a5341e924deb3eb558884484149e3157216ca49ccf747c8d720826a7865cf120b95efc5d35b16e25d2564b28ff2a08bb208ee99a0b2eb266bf6f61e9498db178e90f421641821aad809870a9f81ee820c703980a0ec6d5764beacb4785707efdbf108687b9c4cba30fb1e5fb924ce52fc915a3dbbe13ac5d018acd18de608c1c1e1cd10b9d6e02f7430225d39a9ebe1ba207f0b54ee2ec7cba87bd4f0e08f857f359264cf5abfe49d1c9eca3efa7a35bbd8e9d6e52c533d9e38cb3a674db83a675165ade244979dafc1616be04369d1119ba5137d3d4b6005843e22a20104ca5afc1092faf7979a58973f6c58078f5ba4cc98ea56e713bec82af873081486c2cab1bf669c630c9706a7ba60d67e02c22978ef675d432f215ca37f574856be2877cdc857b63f35b3a9cde231552299885996ee1ec1541738f45fea8a6dc772c333055d9c131ecc8fa7337beea69a98e50974e60e98056cee5566151617b8ec39743366e0effa422d5b0e4f873289a8a423c4b1d528f808315f5396a103e5c9fe7e023dbd5808c5d66d85109436f03f9c3715661e13d491eac831ef8a1d3a53d43caa6a2c6d266e3d6111d5a530f7663f3a94d6b21af367bbbd5f09e14c02d920e73140361ebf58b3e4540127fd272c09774ef4192135c669bb6921867dc1896ec12531e48de27fbef48a84d4b49d076f59ee5d89381dfc7ff7162f2b4189b7a06e68e166b11d6c2a2b9dd7087d9f6db3252a521c1a2da49edd48c01393869c0731cbc8a9ac11d661c2c68264006ea3f3ade55770192f8be9202b7b675dae6b0672b094d0b1f726cb894c75c4716081af52f46548787b6a06469a571b07ff3507338b552ba43fb8e9247b35e74512d290baa7474b5fa9b0925a702af9428126550185147b863f9c8dca44e33e86225a96556f46891bc52cf8d9e8088b4c0a53eae4bdb0d953c70a6935888c389c226343d503b4ae40a5e9b005f8045a3f2ade64575f84b3a312b14e89d7b5c6db5f4b59dc2caadaa999d691019c8d63982d12188c65350be4e7a65f38c40c989fcedfd043ee3c226112ed91331ce72ac586855e200cd0b2e0d8e6de6c3b6696fab7f95ac54af5d325c0fcdfd1160414ef1b276b7de94d13221f87a902703daaa3c2b9771da5d96011f6ff00cfb7fa9ada4a41aa1f6911f0ec49bf44c279a5a0cc79cf0f7c30bdc829f040c827cd213526d40e2b2ad75e9c32ef24e14b577227a3bb9f4e24b7d6c1b62afe8aa6c2f9527b065214aa47cdca6458008da7e2ab2f5be916c23a58efde0766e73f1d0ee5286daaf59643ca3ef91e04f6ed9774c71c9dbf9c86563b11dca0155787b9f798b8a18cfb10f4accfaee1ed3be2c6442a3e31bd493791285846275c8eaf9d794b4108f982395ca98fe66ef4f6792f9cc59de5e68763356ee0244994f042f6e9d0aedcd2432632c22aad170fd21c9e995d899b86841c715904a1e02446e078c1b816d15ceb9ecba527940be837f69a4c17406f70e1f5192a256a34bfe7b40e249ad58e07b69180e57b5c58c044c4c4e07cda1d3b6f7f3e35ddb939ffc03772b18e3a04aea54e84faab8c6b42363bfe3ed69ebfd7a3678c26dea8378bb75bd5b2be09336b67c238087c52aa02d5ad7f08fd66d71190be4b0b43bb6e496368d24ab664ab1336acc2b4e545b958cecd222f6b8eccdf25bd423d28f6d428fc8a09185c612034fab251f9967b73c0fa9f1f7435e3b2fb2e6d6a3e890f69d59374febe1957cafc8fffa5f06d9dfcebe9edaa0b0000b9e2a377ceb6578f9e49e9b3363494829c9dd978f5c390544b4a930966f4446389119081b65782425dee85820015772c0f9800d006372c122044ecc4d4fa24fa4f7563c954a85741cd2f8414807e029f43209f1fa3ac740c5543d8705422f7d827bd4f9e9ebe1a6bace8d0d8b880609468dd2f8601844d22251cdac98953251215929890d275b77e316b1ba011c164987f7fb8ecd33191dc2b5923a036daa2cf0be799d29b5f7ec7bfdff5fa6bb57647f328914923212de2560cf5c1caa704b582bc1331f18018873a7b17ee4e1b63e35e0af25aca5f1f05d094cca1d84af65afb733fcca1a5eef1043ec8384d81fca44a4e1d813e3ba2d2d22202b2da2a2265b77a641b81306f0cc5539a0907bc49cb0c09662e859d1a6e0f17f2b223369df358ac84912373a0a154b433f34d9e89ebd52daa2692f63a14655b4394ce3841ec23f6caf2b8bd641f0d113c2c9820fd85cd04009a2bc4d7515ac458f90f25\",\n        \"tag\": \"55900950d35345daa1be3d1308036ebe\",\n        \"associated_data\": \"32322d4d61792d32303139\",\n        \"time_created\": \"2019-05-22T13:56:17Z\",\n        \"hash_of_public_key\": \"cfbc586e65816bcdfe905b7f83815c03c66a6cb267e341d744f9d74f1e0fdafd\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/deepvalidate/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"deepvalidate",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
