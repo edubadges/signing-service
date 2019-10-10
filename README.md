@@ -5,10 +5,15 @@
 This Python3 service can be used to sign open badges.
 
 Installation: (most simple instructions for CentOS 7)
+
 $ scl enable rh-python36 bash
+
 $ export SECRET_KEY="verylongsecretkey"
+
 $ cd <source_dir>
+
 $ pip install -r reuirements.txt
+
 $ python manage.py runserver
 
 The signing service will be started at http://127.0.0.1:8000/
