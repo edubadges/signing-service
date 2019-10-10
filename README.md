@@ -4,6 +4,7 @@
 
 This Python3 service can be used to sign open badges.
 
+
 Installation: (most simple instructions for CentOS 7)
 
 $ scl enable rh-python36 bash
@@ -12,7 +13,7 @@ $ export SECRET_KEY="verylongsecretkey"
 
 $ cd <source_dir>
 
-$ pip install -r reuirements.txt
+$ pip install -r requirements.txt
 
 $ python manage.py runserver
 
