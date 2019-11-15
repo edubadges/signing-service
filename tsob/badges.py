@@ -48,13 +48,14 @@ def validate_badge(signed_badge, public_key, badge_id):
     try:
         badge_bytes = verify(signed_badge, public_key, badge_id)
 
-        badge = json.loads(badge_bytes)
+        # cannot do this check because the pubkey is not in the badge
 
-        if not badge['badge']['issuer']['publicKey']['publicKeyPem'] == public_key:
-            raise BadgeValidationError(
-                "Public key from encrypted private key is not the same as public key in signed badge.",
-                badge['id'],
-            )
+        # badge = json.loads(badge_bytes)
+        # if not badge['badge']['issuer']['publicKey']['publicKeyPem'] == public_key:
+        #     raise BadgeValidationError(
+        #         "Public key from encrypted private key is not the same as public key in signed badge.",
+        #         badge['id'],
+        #     )
 
         badge_hash = hashlib.sha256(badge_bytes).hexdigest()
 
@@ -126,7 +127,7 @@ def sign_badges(symmetric_key_params, list_of_badges, encrypted_private_key):
     }
 
     for badge in list_of_badges:
-        if badge['badge']['issuer']['publicKey']['id'] != badge['verification']['creator']:
+        if badge['badge']['issuer']['publicKey'] != badge['verification']['creator']:
             raise SigningError("Public key owner is not Issuer.")
 
         normalized_badge, badge_hash = normalize(badge)
