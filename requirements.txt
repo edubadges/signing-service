@@ -6,10 +6,10 @@ cffi==1.12.3
 chardet==3.0.4
 colorama==0.4.1
 cryptography==2.7
-Django==2.2.4
+Django==2.2.6
 django-debug-toolbar==1.11
 djangorestframework==3.9.4
-ecdsa==0.13.2
+ecdsa==0.13.3
 entrypoints==0.3
 flake8==3.7.7
 future==0.17.1
