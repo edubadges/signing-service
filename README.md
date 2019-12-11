@@ -1,8 +1,8 @@
 
 
-# Timestamped Signed Open Badges - TSOB
+## Timestamped Signed Open Badges - TSOB
 
-This Python3 service can be used to sign open badges.
+# This Python3 service can be used to sign open badges.
 
 
 Installation: (most simple instructions for CentOS 7)
@@ -18,6 +18,26 @@ $ pip install -r requirements.txt
 $ python manage.py runserver
 
 The signing service will be started at http://127.0.0.1:8000/
+
+# Installation using Docker
+
+Example tree layout:
+.
+├── config
+│   ├── nginx
+│   └── tsob
+├── docker-compose.yml
+├── docker-entrypoint.sh
+├── Dockerfile
+├── signing-service
+│   ├── manage.py
+│   ├── README.md
+│   ├── requirements.txt
+│   ├── research
+│   ├── templates
+│   └── tsob
+└── update_code.sh
+
 
 
 # Why timestamp a Signed Open Badge?
