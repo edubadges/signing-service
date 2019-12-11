@@ -1,42 +1,44 @@
+![Edubadges](logo.png)
 
+# Timestamped Signed Open Badges - TSOB
 
-## Timestamped Signed Open Badges - TSOB
-
-# This Python3 service can be used to sign open badges.
+## This Python3 service can be used to sign open badges.
 
 
 Installation: (most simple instructions for CentOS 7)
 
-$ scl enable rh-python36 bash
+    $ scl enable rh-python36 bash
 
-$ export SECRET_KEY="verylongsecretkey"
+    $ export SECRET_KEY="verylongsecretkey"
 
-$ cd <source_dir>
+    $ cd <source_dir>
 
-$ pip install -r requirements.txt
+    $ pip install -r requirements.txt
 
-$ python manage.py runserver
+    $ python manage.py runserver
 
 The signing service will be started at http://127.0.0.1:8000/
 
-# Installation using Docker
+## Installation using Docker
 
-Example tree layout:
-.
-├── config
-│   ├── nginx
-│   └── tsob
-├── docker-compose.yml
-├── docker-entrypoint.sh
-├── Dockerfile
-├── signing-service
-│   ├── manage.py
-│   ├── README.md
-│   ├── requirements.txt
-│   ├── research
-│   ├── templates
-│   └── tsob
-└── update_code.sh
+Example directory structure to build the edubadges Signing Service Docker containers:
+
+    /var/docker/tsob/
+
+    ├── config
+    │   ├── nginx
+    │   └── tsob
+    ├── docker-compose.yml
+    ├── docker-entrypoint.sh
+    ├── Dockerfile
+    ├── signing-service
+    │   ├── manage.py
+    │   ├── README.md
+    │   ├── requirements.txt
+    │   ├── research
+    │   ├── templates
+    │   └── tsob
+    └── update_code.sh
 
 
 
