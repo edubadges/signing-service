@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    image: "nginx"
+    container_name: web
+    hostname: <YOUR_WEB_SERVICE_HOSTNAME>
+    domainname: <YOUR_DOMAINNAME>
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  tsob:
+    build: ./
+    hostname: <YOUR_SIGNING_SERVICE_HOSTNAME>
+    domainname: <YOUR_DOMAINNAME>
+    restart: unless-stopped
+    expose:
+      - "8000"
