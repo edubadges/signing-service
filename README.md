@@ -45,6 +45,7 @@ Example directory structure to build the edubadges Signing Service Docker contai
 * Run the example_install.sh script.
 
 Basic commands to build:
+
     $ cd /var/docker/tsob/
     $ git clone --single-branch -b master https://github.com/edubadges/signing-service
     $ cp /var/docker/tsob/config/tsob/settings_local.py /var/docker/tsob/signing-service/tsob/settings/settings_local.py
