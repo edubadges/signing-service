@@ -4,7 +4,6 @@
 
 ## This Python3 service can be used to sign open badges.
 
-
 Installation: (most simple instructions for CentOS 7)
 
     $ scl enable rh-python36 bash
@@ -19,11 +18,11 @@ Installation: (most simple instructions for CentOS 7)
 
 The signing service will be started at http://127.0.0.1:8000/
 
-## Installation using Docker
+## Installation using example Docker scripts
 
 Example directory structure to build the edubadges Signing Service Docker containers:
 
-    /var/docker/tsob/
+    Working_dir: /var/docker/tsob/
 
     ├── config
     │   ├── nginx
@@ -38,8 +37,23 @@ Example directory structure to build the edubadges Signing Service Docker contai
     │   ├── research
     │   ├── templates
     │   └── tsob
-    └── update_code.sh
+    └── example_install.sh
 
+* Create a similar setup using the directory structure above.
+* Copy the docker files from the Github docker subdir to your working_dir.
+* Copy the config files from config/nginx and config/tsob/
+* Run the example_install.sh script.
+
+Basic commands to build:
+    $ cd /var/docker/tsob/
+    $ git clone --single-branch -b master https://github.com/edubadges/signing-service
+    $ cp /var/docker/tsob/config/tsob/settings_local.py /var/docker/tsob/signing-service/tsob/settings/settings_local.py
+    $ cp /var/docker/tsob/config/tsob/development.py /var/docker/tsob/signing-service/tsob/settings/development.py
+    $ cp /var/docker/tsob/config/tsob/production.py /var/docker/tsob/signing-service/tsob/settings/production.py
+    $ docker-compose build
+    $ docker-compose up -d
+
+This will create the two docker containers.
 
 
 # Why timestamp a Signed Open Badge?
