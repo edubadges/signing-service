@@ -35,7 +35,7 @@ python-jose==3.0.1
 pytz==2019.1
 PyYAML==5.1.1
 requests==2.22.0
-rsa==4.0
+rsa==4.7
 shellescape==3.4.1
 six==1.12.0
 sqlparse==0.3.0
